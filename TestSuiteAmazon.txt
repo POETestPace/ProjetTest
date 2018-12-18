@@ -1,0 +1,72 @@
+*** Settings ***
+Library           SeleniumLibrary
+
+*** Variables ***
+${url}            https://www.amazon.fr
+${prix}           ${EMPTY}
+@{listeRecherche}    ISTQB    La La Land    HPQC
+
+*** Test Cases ***
+Recherche_Amazon
+    [Tags]    Recherche    1
+    Open Browser    https://www.amazon.fr    chrome
+    Location Should Be    https://www.amazon.fr/
+    Click Element    id=twotabsearchtextbox
+    Input Text    id=twotabsearchtextbox    ISTQB
+    Textfield Value Should Be    id=twotabsearchtextbox    ISTQB
+    Click Button    xpath=//*[@id="nav-search"]/form/div[2]/div/input
+    Element Should Be Visible    xpath=//*[contains(text(),'Pratique des tests logiciels - 3e éd.')]
+    Click Element    xpath=//*[contains(text(),'Pratique des tests logiciels - 3e éd.')]
+    Wait Until Element Is Visible    xpath=//button[contains(@aria-label,\"Non, merci")]    5
+    Click Button    xpath=//button[contains(@aria-label,\"Non, merci")]
+    Wait Until Element Is Visible    id=add-to-cart-button    5
+    Sleep    2s
+    Click Element    id=add-to-cart-button
+    Page Should Contain    Ajouté au panier
+    Close All Browsers
+
+Recherche_Variables
+    [Tags]    Recherche
+    Open Browser    ${url}    chrome
+    Location Should Contain    ${url}
+    Input Text    id=twotabsearchtextbox    @{listeRecherche}[0]
+    Textfield Value Should Be    id=twotabsearchtextbox    @{listeRecherche}[0]
+    Click Button    xpath=//*[@id="nav-search"]/form/div[2]/div/input
+    Element Should Be Visible    xpath=//*[contains(text(),'Pratique des tests logiciels - 3e éd.')]
+    Click Element    xpath=//*[contains(text(),'Pratique des tests logiciels - 3e éd.')]
+    Wait Until Element Is Visible    xpath=//button[contains(@aria-label,\"Non, merci")]    5
+    Click Button    xpath=//button[contains(@aria-label,\"Non, merci")]
+    ${prix}=    Get Element Attribute    xpath=//*[@id="buyNewSection"]/div/div/span/span    textContent
+    Log To Console    ${prix}
+    Sleep    2s
+    Click Element    id=add-to-cart-button
+    Page Should Contain    Ajouté au panier
+    Close All Browsers
+
+Recherche_Data-Driven
+    [Tags]    3    Data
+    [Setup]    Open Browser    https://www.amazon.fr    chrome
+    [Template]    Recherche Amazon    # recherche Amazon avec element de liste
+    @{listeRecherche}[0]
+    @{listeRecherche}[1]
+    @{listeRecherche}[2]
+    [Teardown]    Close All Browsers
+
+Recherche_Boucle
+    [Tags]    4    Data
+    Open Browser    https://www.amazon.fr    chrome
+    : FOR    ${ELEMENT}    IN    @{listeRecherche}
+    \    Log    ${ELEMENT}
+    \    Recherche Amazon    ${ELEMENT}
+    Close All Browsers
+
+Exercice1
+    [Tags]    Ex
+
+*** Keywords ***
+Recherche Amazon
+    [Arguments]    ${article}
+    Input Text    id=twotabsearchtextbox    ${article}
+    Textfield Value Should Be    id=twotabsearchtextbox    ${article}
+    Click Button    xpath=//*[@id="nav-search"]/form/div[2]/div/input
+    Sleep    2s
