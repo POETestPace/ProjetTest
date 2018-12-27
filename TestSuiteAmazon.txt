@@ -8,6 +8,7 @@ ${prix}           ${EMPTY}
 
 *** Test Cases ***
 Recherche_Amazon
+	[Documentation] Ceci est une suite de test test
     [Tags]    Recherche    1
     Open Browser    https://www.amazon.fr    chrome
     Location Should Be    https://www.amazon.fr/
