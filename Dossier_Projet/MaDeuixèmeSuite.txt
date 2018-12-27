@@ -1,0 +1,17 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Test Cases ***
+MonDeuxièmeCasDeTest
+    Open Browser    https://www.amazon.fr/    chrome
+    Click Element    id=twotabsearchtextbox
+    Input Text    id=twotabsearchtextbox    ISTQB
+    Click Button    //*[@id="nav-search"]/form/div[2]/div/input
+    Click Element    xpath=//*[contains(test(),'Pratique des tests logiciels - 3e éd.')]
+    Sleep    2s
+    Comment    Click Button
+    Comment    Sleep    2s
+    Comment    Click Button
+    Comment    Close All Browsers
+
+6
